@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "710370fc-7cce-4699-8de2-9151d6916046",
+		"name": "Greenhouse",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Index",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/public",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"public"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Doc 1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/documents/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"documents",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get coltivazione 1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/coltivazioni/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"coltivazioni",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get coltivazioni",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/coltivazioni",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"coltivazioni"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create coltivazione",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"departmentId\": 1,\n    \"name\": \"document Name here\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/coltivazioni",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"coltivazioni"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Del Doc",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/documents/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"documents",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Del coltivazione 2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/coltivazioni/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"coltivazioni",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "tokenName",
+				"value": "GHToken",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "http://localhost:8081",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "GreenhousePublic",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "http://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "http://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/auth",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code_with_pkce",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": false,
+				"type": "boolean"
+			},
+			{
+				"key": "clientSecret",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "test",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "test",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid profile email",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "8c72ff2e-1a2e-4c7c-8608-e4ef97c30555",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "13a57388-d6d0-428c-ab96-ef51d9767f68",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
