@@ -13,7 +13,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Greenhouse-1</name>
 	<description>Demo project for Spring Boot</description>
-
+	
+	<repositories>
+    	<repository>
+        	<id>Eclipse Paho Repo</id>
+        	<url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+    	</repository>
+	</repositories>
 	<properties>
 		<java.version>15</java.version>
 		<springboot-version>2.2.4.RELEASE</springboot-version>
@@ -104,7 +110,11 @@
 	    	</exclusions>
 		</dependency>
 		
-
+		<dependency>
+	        <groupId>org.eclipse.paho</groupId>
+	        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+	        <version>1.2.0</version>
+    	</dependency>
 	</dependencies>
 
 	<build>

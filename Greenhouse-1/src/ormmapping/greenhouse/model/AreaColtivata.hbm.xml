@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.tdd.greenhouse.model.AreaColtivata" table="AreaColtivata" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="coltivazione" column="ColtivazioneID" class="com.tdd.greenhouse.model.Coltivazione" cascade="save-update,lock" unique="true" not-null="false" lazy="proxy" access="field">
+		</many-to-one>
+		<many-to-one name="sezione" cascade="lock" column="SezioneID" class="com.tdd.greenhouse.model.Sezione" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<property name="fila" column="Fila" type="integer" length="10" not-null="true" lazy="false"/>
+		<property name="posizione" column="Posizione" type="integer" length="10" not-null="true" lazy="false"/>
+		<property name="estensione" column="Estensione" type="float" not-null="true" lazy="false"/>
+		<property name="tipo_di_terreno" column="Tipo_di_terreno" type="string" length="255" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

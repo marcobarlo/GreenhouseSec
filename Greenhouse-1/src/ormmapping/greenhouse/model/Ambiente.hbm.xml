@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.tdd.greenhouse.model.Ambiente" table="Ambiente" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="temperaturaTarget" column="TemperaturaTarget" type="float" not-null="false" lazy="false"/>
+		<property name="irradianzaTarget" column="IrradianzaTarget" type="float" not-null="false" lazy="false"/>
+		<property name="umiditaSuoloTarget" column="UmiditaSuoloTarget" type="float" not-null="false" lazy="false"/>
+		<property name="sogliaTemp" column="SogliaTemp" type="float" not-null="true" lazy="false"/>
+		<property name="sogliaIrr" column="SogliaIrr" type="float" not-null="true" lazy="false"/>
+		<property name="sogliaUmi" column="SogliaUmi" type="float" not-null="true" lazy="false"/>
+	</class>
+</hibernate-mapping>
