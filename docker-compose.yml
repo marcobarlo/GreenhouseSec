@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mariadb:10.5-focal
+    restart: always
+    volumes:
+     - container-volume:/var/lib/mysql
+     - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    environment:
+      MYSQL_DATABASE: greenhouse
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  
+volumes:
+  container-volume:
