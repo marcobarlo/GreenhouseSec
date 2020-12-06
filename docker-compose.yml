@@ -4,10 +4,13 @@ services:
 
   db:
     image: mariadb:10.5-focal
+    #dockerfile:./Dockerfile
     restart: always
     command: mysqld --user=root
     volumes:
       - ./mysql-dump:/docker-entrypoint-initdb.d
+      - ./mysql-cert:/etc/mysql/ssl
+      - ./mariadbconf:/etc/mysql/conf.d
     environment:
       MYSQL_DATABASE: greenhouse
       MYSQL_ROOT_PASSWORD: password
