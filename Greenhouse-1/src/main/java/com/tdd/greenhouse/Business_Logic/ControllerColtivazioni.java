@@ -70,4 +70,18 @@ public class ControllerColtivazioni {
 		}
 	}
 
+	protected static ColtivazioneBusiness getColtivazioneByID(int id)
+	{
+		Coltivazione c=null;
+		try {c = Coltivazione.getColtivazioneByORMID(id);}
+		catch (PersistentException e) {}
+		if(c != null)
+		{
+			ColtivazioneBusiness cb = new ColtivazioneBusiness(c.getID(),c.getSezione(),
+					c.getFila(),c.getPosizione(),c.getTipo(),c.getStato(),c.getData_prossima_operazione());
+			return cb;
+		}
+		else
+			return null;
+	}
 }

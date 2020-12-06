@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<brokerConfig>
+`		<brokerHost>tcp://localhost:1883</brokerHost>
+		<clientID>Mainframe</clientID>
+	</brokerConfig>
+	<devices>
+	    <device>
+	    	<ID>1</ID>
+	        <mac>0A-CF-B3-C4-D8-32</mac>
+	        <sezione>1</sezione>
+	    </device>
+	
+	    <device>
+	        <ID>2</ID>
+	        <mac>00-08-74-4C-7F-1D</mac>
+	        <sezione>1</sezione>
+	    </device>
+	
+	    <device>
+	        <ID>3</ID>
+	        <mac>00-08-74-4C-7F-1D</mac>
+	        <sezione>1</sezione>
+	    </device>
+    </devices>
+</config>

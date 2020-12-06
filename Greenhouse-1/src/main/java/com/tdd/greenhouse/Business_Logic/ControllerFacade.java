@@ -69,5 +69,10 @@ public class ControllerFacade {
 	public static void logOut() {
 		ControllerUtenti.logOut();
 	}
+	
+	public static ColtivazioneBusiness getColtivazioneByID(int id)
+	{
+		return ControllerColtivazioni.getColtivazioneByID(id);
+	}
 
 }
