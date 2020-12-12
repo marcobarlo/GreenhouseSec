@@ -11,11 +11,20 @@ License Type: Evaluation
    	<!-- properties -->
 		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 		<property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mariadb://localhost/greenhouse</property>
+		<property name="connection.url">jdbc:mariadb://localhost/greenhouse?autoReconnect=true&amp;useUniCode=true&amp;characterEncoding=UTF-8&amp;useSSL=true&amp;verifyServerCertificate=false&amp;requireSSL=true</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">password</property>
 		<property name="show_sql">false</property>
 		<property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
+		<property name="connection.verifyServerCertificate">false</property> 
+		<property name="connection.useSSL">true</property>
+		<!-- <property name="connectionProperties">
+	            oracle.net.ssl_cipher_suites: (ssl_rsa_export_with_rc4_40_md5, ssl_rsa_export_with_des40_cbc_sha)
+	            oracle.net.ssl_client_authentication: false
+	            oracle.net.ssl_version: 3.0
+	            oracle.net.encryption_client: REJECTED 
+	            oracle.net.crypto_checksum_client: REJECTED
+        </property> -->
 		<!-- mapping files -->
 		<mapping resource="ormmapping/greenhouse/model/Ambiente.hbm.xml" />
 		<mapping resource="ormmapping/greenhouse/model/AreaColtivata.hbm.xml" />

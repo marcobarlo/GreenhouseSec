@@ -13,12 +13,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 import java.io.File;
-
+import java.util.Properties;
 
 public class Main {
 
 	public static void main(String[] args) 
 	{
+	    Properties systemProps = System.getProperties();
+	    systemProps.put("javax.net.ssl.keyStorePassword","password");
+	    systemProps.put("javax.net.ssl.keyStore","D:\\greenhouseSSD\\mysql-cert\\keystoreser.jks");
+	    systemProps.put("javax.net.ssl.trustStore", "D:\\greenhouseSSD\\mysql-cert\\keystoreser.jks");
+	    systemProps.put("javax.net.ssl.trustStorePassword","password");
+	    System.setProperties(systemProps);
 		/*try {
 			Process process = new ProcessBuilder("D:\\Programmi\\mosquitto\\mosquitto.exe", "-v").start();
 		} catch (IOException e1) {
