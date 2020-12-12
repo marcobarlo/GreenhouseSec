@@ -45,6 +45,22 @@
   "roles": {
     "realm": [
       {
+        "id": "7ac41bd5-5913-4d50-9a80-8d12170903db",
+        "name": "Agronomo",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "Greenhouse",
+        "attributes": {}
+      },
+      {
+        "id": "c45a6d19-bdbd-4633-91b9-8ba0756d197e",
+        "name": "Direttore",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "Greenhouse",
+        "attributes": {}
+      },
+      {
         "id": "ca10d870-97c9-431c-bb3d-7f498de64fc1",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -57,6 +73,22 @@
         "id": "1c7cceb5-03ac-4b8c-b55b-d41b1bf1a1cf",
         "name": "offline_access",
         "description": "${role_offline-access}",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "Greenhouse",
+        "attributes": {}
+      },
+      {
+        "id": "8b9de15c-8a04-47a7-8f02-cac09700298d",
+        "name": "AmministratoreSw",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "Greenhouse",
+        "attributes": {}
+      },
+      {
+        "id": "8dcdd268-7b96-4def-b9cf-f38a8edb9afe",
+        "name": "Contadino",
         "composite": false,
         "clientRole": false,
         "containerId": "Greenhouse",
@@ -621,7 +653,15 @@
             "attributes": {},
             "_id": "a19fedb3-c552-47f3-becb-ff81ae22591c",
             "uris": [
-              "/coltivazione/{coltivazione-id}"
+              "/coltivazione/{id}"
+            ],
+            "scopes": [
+              {
+                "name": "coltivazione:modify"
+              },
+              {
+                "name": "coltivazione:view"
+              }
             ]
           },
           {
@@ -647,78 +687,76 @@
         ],
         "policies": [
           {
-            "id": "c560fb72-6a91-449a-8ab7-535c7bd94230",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
+            "id": "8e1dd5cd-7a8c-40d9-afab-6a03fe0fdd59",
+            "name": "OnlyAgronomo",
+            "description": "I permessi relativi SOLO agli agronomi",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"Agronomo\",\"required\":false}]"
+            }
+          },
+          {
+            "id": "f7d1a156-5c07-4c3d-bc4a-c65397ca1f69",
+            "name": "Agronomo+Contadino",
+            "description": "Tutti quelli che possono vedere una coltivazione",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"Agronomo\",\"required\":false},{\"id\":\"Contadino\",\"required\":false}]"
+            }
+          },
+          {
+            "id": "15b2ba4e-a87a-4295-87a0-ed348f3907e4",
+            "name": "ProvaAgronomo",
             "type": "js",
             "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
+            "decisionStrategy": "UNANIMOUS",
             "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+              "code": "// org.keycloak.authorization.common.DefaultEvaluationContext\n//https://github.com/keycloak/keycloak/blob/master/services/src/main/java/org/keycloak/authorization/common/DefaultEvaluationContext.java\nvar context = $evaluation.context;\nprint('\\n------Only public albums-----');\n//https://www.keycloak.org/docs-api/5.0/javadocs/org/keycloak/models/cache/infinispan/authorization/ResourceAdapter.html\nvar resource = $evaluation.getPermission().getResource();\n//for each (var e in context.getClass().getMethods()) print(e); // foo, bar\nprint(\"---- Context Identity ----\");\n// https://github.com/keycloak/keycloak/blob/master/services/src/main/java/org/keycloak/authorization/common/KeycloakIdentity.java\nprint(context.getClass().getName());\nfor (var e in context.getIdentity().getAttributes()) print(e);\nprint(\"---- Context Attributes ----\");\nprint(context.getIdentiy().getAttributes().toMap());\n// for each (var e in context.getAttributes().toMap()) print(e);\nvar ctxAttr = context.getAttributes().toMap();\nprint(\"---- Resource Attributes ----\");\nvar attributes = resource.getAttributes();\nprint(attributes);\nvar HashMap = Java.type('java.util.HashMap');\nvar hydratedAttributes = new HashMap();\n// print(attributes);\nfor (var resAttrKey in attributes.keySet()) {\n// print(resAttrKey);\nprint('Resource has key \\'' + resAttrKey + '\\' getting it from context');\nhydratedAttributes[resAttrKey] = ctxAttr.get(resAttrKey);\n}\n//print('hydratedAttributes');\n//print(hydratedAttributes);\nif (hydratedAttributes.get('Sezione') == 1){\n$evaluation.grant();\n}\n\n\n\n\n"
             }
           },
           {
-            "id": "f97da7cc-15e1-4314-af87-b4882118a0b9",
-            "name": "PolicyViewColtivazione",
-            "type": "role",
+            "id": "c7de4015-9cbf-4f6c-97d5-fd86e7ace8d7",
+            "name": "Policy Prova",
+            "description": "My Policy from a JS file",
+            "type": "script-prova.js",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {}
+          },
+          {
+            "id": "84554099-11ce-49c5-bd66-13261d781dc5",
+            "name": "prova3",
+            "type": "js",
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "roles": "[{\"id\":\"GreenhouseClient/Agronomo\",\"required\":false},{\"id\":\"GreenhouseClient/Direttore\",\"required\":false},{\"id\":\"GreenhouseClient/Contadino\",\"required\":false}]"
+              "code": "$evaluation.grant();"
             }
           },
           {
-            "id": "f6252f78-49cf-4f9b-8a94-5bc88bbcb7d9",
-            "name": "PolicyViewColtivazioni",
-            "type": "role",
+            "id": "03aa88e2-3751-4422-a15e-ec346935e632",
+            "name": "ModifyColtivazione",
+            "type": "scope",
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "roles": "[{\"id\":\"GreenhouseClient/Direttore\",\"required\":false},{\"id\":\"GreenhouseClient/Agronomo\",\"required\":false},{\"id\":\"GreenhouseClient/Contadino\",\"required\":false}]"
+              "scopes": "[\"coltivazione:modify\"]",
+              "applyPolicies": "[\"OnlyAgronomo\"]"
             }
           },
           {
-            "id": "eb190fb5-97fe-495f-ae8f-1ead5bf57275",
-            "name": "PolicyListColtivazioni",
-            "type": "role",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "roles": "[{\"id\":\"GreenhouseClient/Agronomo\",\"required\":false},{\"id\":\"GreenhouseClient/Direttore\",\"required\":false},{\"id\":\"GreenhouseClient/Contadino\",\"required\":false}]"
-            }
-          },
-          {
-            "id": "645f349f-d1ab-4a69-9575-8f645f919c41",
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:GreenhouseClient:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          },
-          {
-            "id": "789dfd68-d90b-4e46-9508-42295bd12693",
-            "name": "viewColtivazione",
+            "id": "594ff073-3b21-4ff8-a029-1f6859211c5c",
+            "name": "ViewColtivazione",
             "type": "scope",
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
               "scopes": "[\"coltivazione:view\"]",
-              "applyPolicies": "[\"PolicyViewColtivazione\"]"
-            }
-          },
-          {
-            "id": "7ab0af8e-43cb-4976-9d56-a91432d35152",
-            "name": "ListColtivazioni",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "scopes": "[\"coltivazioni:list\"]",
-              "applyPolicies": "[\"PolicyListColtivazioni\"]"
+              "applyPolicies": "[\"prova3\"]"
             }
           }
         ],
@@ -742,6 +780,10 @@
             "id": "b6288657-a011-4675-8a3e-ef914489713d",
             "name": "coltivazioni:list",
             "displayName": "coltivazioni:list"
+          },
+          {
+            "id": "54053010-401a-4bcd-a376-9427f91c804a",
+            "name": "coltivazione:modify"
           }
         ],
         "decisionStrategy": "UNANIMOUS"
