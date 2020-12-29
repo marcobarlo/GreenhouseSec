@@ -25,6 +25,10 @@ public class ControllerFacade {
 	public static boolean modificaAmbiente(int id, Float temperatura, Float umidita, Float irradianza) {
 			return ControllerParametriAmbientali.modificaAmbiente(id, temperatura, umidita, irradianza);
 	}
+	
+	public static boolean modificaAmbiente(int id, int ids, Float temperatura, Float umidita, Float irradianza) {
+		return ControllerParametriAmbientali.modificaAmbiente(id, ids, temperatura, umidita, irradianza);
+}
 
 	/**
 	 * 
@@ -74,5 +78,11 @@ public class ControllerFacade {
 	{
 		return ControllerColtivazioni.getColtivazioneByID(id);
 	}
+	
+	public static ColtivazioneBusiness getColtivazioneByID(int id,int idsez)
+	{
+		return ControllerColtivazioni.getColtivazioneByID(id,idsez);
+	}
+
 
 }

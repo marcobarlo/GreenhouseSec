@@ -53,14 +53,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/coltivazioni/1",
+					"raw": "http://localhost:8081/sezione/1/coltivazione/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"coltivazioni",
+						"sezione",
+						"1",
+						"coltivazione",
 						"1"
 					]
 				}
@@ -81,6 +83,37 @@
 					"port": "8081",
 					"path": [
 						"coltivazioni"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put coltivazione 1",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"temperatura\": 15,\r\n    \"umidita\": 96,\r\n    \"irradianza\": 1200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/sezione/1/coltivazione/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"sezione",
+						"1",
+						"coltivazione",
+						"1"
 					]
 				}
 			},

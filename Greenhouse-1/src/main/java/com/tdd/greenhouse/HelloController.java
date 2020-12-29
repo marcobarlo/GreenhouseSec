@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.keycloak.KeycloakSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -15,16 +16,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tdd.greenhouse.Business_Logic.ColtivazioneBusiness;
 import com.tdd.greenhouse.Business_Logic.ControllerFacade;
 import com.tdd.greenhouse.Business_Logic.DettagliBusiness;
 import com.tdd.greenhouse.security.*;
-
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 public class HelloController {
@@ -46,21 +44,28 @@ public class HelloController {
 
     
     @GetMapping(value = "sezione/{idsez}/coltivazione/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ReturnGetColtivazione getColtivazione(@PathVariable("id") long id, Model model) throws JsonProcessingException
+    public ReturnGetColtivazione getColtivazione(@PathVariable("id") long id,@PathVariable("idsez") long idsez, Model model) throws JsonProcessingException
     {
         configCommonAttributes(model);
         int idi = (int) id;
-        ColtivazioneBusiness colt = ControllerFacade.getColtivazioneByID(idi);
-        DettagliBusiness dett = ControllerFacade.getDettagliColtivazione(idi);
-        return new ReturnGetColtivazione(dett,colt);
+        int ids = (int) idsez;
+        ColtivazioneBusiness colt = ControllerFacade.getColtivazioneByID(idi,ids);
+        if(colt!=null)
+        {
+        	DettagliBusiness dett = ControllerFacade.getDettagliColtivazione(idi);
+        	return new ReturnGetColtivazione(dett,colt);
+        }
+        else
+        	throw new NotFoundException();
     }    
 
     @PutMapping(value = "sezione/{idsez}/coltivazione/{id}")
-    public ResponseEntity<Boolean> putColtivazione(@PathVariable("id") long id, @RequestBody ParamsPut parametri/*, @RequestBody float umidita,  @RequestBody float irradianza*/,Model model) throws JsonProcessingException
+    public ResponseEntity<Boolean> putColtivazione(@PathVariable("id") long id,@PathVariable("idsez") long idsez, @RequestBody ParamsPut parametri/*, @RequestBody float umidita,  @RequestBody float irradianza*/,Model model) throws JsonProcessingException
     {
         int idi = (int) id;
+        int ids = (int) idsez;
         //ColtivazioneBusiness colt = ControllerFacade.getColtivazioneByID(idi);
-        boolean risposta = ControllerFacade.modificaAmbiente(idi, parametri.getTemperatura(), parametri.getUmidita(), parametri.getIrradianza());
+        boolean risposta = ControllerFacade.modificaAmbiente(idi, ids, parametri.getTemperatura(), parametri.getUmidita(), parametri.getIrradianza());
         return ResponseEntity.ok(risposta);
     }    
     
@@ -93,4 +98,14 @@ public class HelloController {
 	      boolean deleted = true;
 	      return ResponseEntity.ok(deleted);
 	  }
+
+
+	@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Coltivazione not found")
+	public class NotFoundException extends RuntimeException {
+	
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+	}
 }

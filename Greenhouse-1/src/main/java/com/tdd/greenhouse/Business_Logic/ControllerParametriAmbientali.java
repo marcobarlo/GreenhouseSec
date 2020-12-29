@@ -43,6 +43,40 @@ public class ControllerParametriAmbientali {
 			return false;
 		}
 	}
+	
+	protected static boolean modificaAmbiente(int id,int ids, Float temperatura, Float umidita, Float irradianza) {
+		Coltivazione c;
+		
+		try {			
+			if(temperatura == null || umidita == null || irradianza == null)
+			{
+				DettagliBusiness dbus = ControllerColtivazioni.getDettagliBusiness(id,ids);
+				if(dbus!=null)
+				{
+					if(temperatura == null)
+						temperatura = dbus.getTemperatura_target();
+					if(umidita == null)
+						umidita = dbus.getUmidita_target();
+					if(irradianza == null)
+						irradianza = dbus.getIrradianza_target();
+				}
+			}
+			c = Coltivazione.getColtivazioneByORMID(id);
+			int sez= c.getSezione();
+			if(sez == ids)
+			{
+				Connection conn = Connection.getInstance();
+				if(conn.modificaAmbiente(c.getIDAmbiente(), temperatura, umidita, irradianza,sez)) 
+				{
+					return c.modificaAmbiente(temperatura, umidita, irradianza);
+				}
+				else return false;
+			}
+			else return false;	
+		} catch (PersistentException e) {
+			return false;
+		}
+	}
 
 	protected static void modificaAmbienteAttuale(int id, float temperatura, float umidita, float irradianza) {
 		Ambiente amb;

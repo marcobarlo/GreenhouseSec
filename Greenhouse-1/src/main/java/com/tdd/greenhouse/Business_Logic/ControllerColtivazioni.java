@@ -69,6 +69,23 @@ public class ControllerColtivazioni {
 			return null;
 		}
 	}
+	
+	protected static DettagliBusiness getDettagliBusiness(int id, int ids)
+	{
+		Coltivazione colt;
+		try {
+			colt = Coltivazione.getColtivazioneByORMID(id);
+			if(colt.getSezione()==ids)
+			{
+				int amb = colt.getIDAmbiente();
+				DettagliBusiness b = new DettagliBusiness(colt.getDescrizione(),colt.getTemperaturaTarget(),colt.getUmiditaTarget(),colt.getIrradianzaTarget(),amb);
+				return b;
+			}
+			else return null;
+		} catch (PersistentException e) {
+			return null;
+		}
+	}
 
 	protected static ColtivazioneBusiness getColtivazioneByID(int id)
 	{
@@ -80,6 +97,23 @@ public class ControllerColtivazioni {
 			ColtivazioneBusiness cb = new ColtivazioneBusiness(c.getID(),c.getSezione(),
 					c.getFila(),c.getPosizione(),c.getTipo(),c.getStato(),c.getData_prossima_operazione());
 			return cb;
+		}
+		else
+			return null;
+	}
+	
+	protected static ColtivazioneBusiness getColtivazioneByID(int id,int idsez)
+	{
+		Coltivazione c=null;
+		try {c = Coltivazione.getColtivazioneByORMID(id);}
+		catch (PersistentException e) {}
+		if(c != null)
+		{
+			ColtivazioneBusiness cb = new ColtivazioneBusiness(c.getID(),c.getSezione(),
+					c.getFila(),c.getPosizione(),c.getTipo(),c.getStato(),c.getData_prossima_operazione());
+			if(cb.getSezione()==idsez)
+				return cb;
+			else return null;
 		}
 		else
 			return null;
