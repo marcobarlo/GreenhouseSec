@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "88d1d39e-60fb-49d2-882f-ecd19bd110b8",
+		"name": "GH2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create coltivazione Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJMeERJMENSUV9tSzZXemFpWXc5eG1hMDBuUmhkZ0FESlVFSUF2c1RCYm9RIn0.eyJleHAiOjE2MDkzMzA3OTMsImlhdCI6MTYwOTMzMDQ5MywianRpIjoiNWRiMTQ1MDItZjEwNi00MWFlLTlhMTQtYjZiM2MzNTkzMWRmIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL0dyZWVuaG91c2UiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiODc4ZTNhNjgtZTk0MS00M2M0LWFkODYtZDlhZjFjZDIwZDRkIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiR3JlZW5ob3VzZUNsaWVudCIsInNlc3Npb25fc3RhdGUiOiIwYmVhYmExMi1lMTI0LTRjODctYWIxMi0xYjM1NzVlYjdiYzkiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiR3JlZW5ob3VzZUNsaWVudCI6eyJyb2xlcyI6WyJ1bWFfcHJvdGVjdGlvbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJjbGllbnRIb3N0IjoiMTcyLjIxLjAuMSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50SWQiOiJHcmVlbmhvdXNlQ2xpZW50IiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2VydmljZS1hY2NvdW50LWdyZWVuaG91c2VjbGllbnQiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjIxLjAuMSJ9.e10FORExN7zK5dCgUaZ1A3mf2laWZVme6sGJyJtpmDPQ4p_kUdNUz0AqzpcJdsxMpr56l0Go0US0DRQXzn5L4I5vizy6WwsdXcij50nT6WPEeZ4FVkT2YoD8oun3_EzJDOxOgBY8-6OVFg-ZLGcc7RZhuBe_Vr9obY7swz1VsZtNMkmACtLEndNNsm3JQT77TbP3V-PwHSO5DlMwpAqFoEmSu9nLkTyJoRsjv1RrAfrKpY3ppWxbn8pQCgLI70klbOfZEtmYL9TDLYzeJUq-m4ukq8ivcJrmANnVsJQtMXYizgxc8X50-sRAzUUhRr0U_aroCd_F3DIR-zv-pq_r4g",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"departmentId\": 1,\n    \"name\": \"document Name here\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"Greenhouse",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get coltivazioni Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/coltivazioni",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"coltivazioni"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crea risorsa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJMeERJMENSUV9tSzZXemFpWXc5eG1hMDBuUmhkZ0FESlVFSUF2c1RCYm9RIn0.eyJleHAiOjE2MDkzMjc2MDQsImlhdCI6MTYwOTMyNzMwNCwianRpIjoiZGNkYWNkZDItNjg1Ny00NWFiLThkMjgtMzNhNTkzOWJlMDI3IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL0dyZWVuaG91c2UiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiODc4ZTNhNjgtZTk0MS00M2M0LWFkODYtZDlhZjFjZDIwZDRkIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiR3JlZW5ob3VzZUNsaWVudCIsInNlc3Npb25fc3RhdGUiOiI1MWE4NWMzNC0zODVhLTRjMDItOGQ5ZS1jN2YyZTU0NmRkOWIiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiR3JlZW5ob3VzZUNsaWVudCI6eyJyb2xlcyI6WyJ1bWFfcHJvdGVjdGlvbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJjbGllbnRIb3N0IjoiMTcyLjIxLjAuMSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50SWQiOiJHcmVlbmhvdXNlQ2xpZW50IiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2VydmljZS1hY2NvdW50LWdyZWVuaG91c2VjbGllbnQiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjIxLjAuMSJ9.CndG0K4YWUkcoBxHDgoB0d4fTx0MMZP3LukKITijtMOnBKjE7AiAObm781PEFthEyWy0s0cWiHxx1V8fknTVZcJkclUnqba8tmesK6lCD1nnAopaPluiGmmV4jcyGU7Sb7OKn4riQTnNWmtFzivuQH-N7MFaGLUmKPiRRPbKY2SWYbFzLP54hhW78y9WNjecc-ZG6Tahy9oCz7Fu70ohSy8gSgpmjo3FEjHACXmffkxWBz1yER5hziLcZJ7rKQqvZ7IQ90jjRJPKnxnLKpRT2FJCF0dhpc0xEKZ_wNwb0GqHdomoyi1rCrKAmDiP2Jbo0i3RUUYEuU1N8qDHRiKe8A",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"name\":\"Coltivazione2\",\n     \"type\":\"Assets\",\n     \"resource_scopes\":[\n         \"coltivazione:view\"\n      ],\n      \"owner\":\"amarch\",\n      \"ownerManagedAccess\": true\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/realms/Greenhouse/authz/protection/resource_set",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"Greenhouse",
+						"authz",
+						"protection",
+						"resource_set"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create resource Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "grant_type=client_credentials&client_id=adee35f9-7362-4b97-ba65-bff97576e443&client_secret=password",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"Greenhouse",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "710370fc-7cce-4699-8de2-9151d6916046",
-		"name": "Greenhouse",
+		"_postman_id": "74d30798-9296-4f7c-98a4-fae4d9d9b117",
+		"name": "GreenhousenoSSL",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -153,12 +153,12 @@
 		"oauth2": [
 			{
 				"key": "accessTokenUrl",
-				"value": "https://localhost:8443/auth/realms/Greenhouse/protocol/openid-connect/token",
+				"value": "https://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
 				"type": "string"
 			},
 			{
 				"key": "authUrl",
-				"value": "https://localhost:8443/auth/realms/Greenhouse/protocol/openid-connect/auth",
+				"value": "https://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/auth",
 				"type": "string"
 			},
 			{
