@@ -12,10 +12,10 @@ License Type: Evaluation
 		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 		<property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
 		<property name="connection.url">jdbc:mariadb://localhost/greenhouse?autoReconnect=true&amp;useUniCode=true&amp;characterEncoding=UTF-8&amp;useSSL=true&amp;verifyServerCertificate=false&amp;requireSSL=true</property>
-		<property name="connection.clientCertificateKeyStoreUrl">D:\greenhouseSSD\mysql-cert\keystore</property>
+		<property name="connection.clientCertificateKeyStoreUrl">D:\greenhouseSSD\keystores\keystore</property>
 		<property name="connection.clientCertificateKeyStoreType">jks</property>
 		<property name="connection.clientCertificateKeyStorePassword">password</property>
-		<property name="connection.trustCertificateKeyStoreUrl">D:\greenhouseSSD\mysql-cert\truststore</property>
+		<property name="connection.trustCertificateKeyStoreUrl">D:\greenhouseSSD\keystores\truststore</property>
 		<property name="connection.trustCertificateKeyStoreType">jks</property>
 		<property name="connection.trustCertificateKeyStorePassword">password</property>
 		<property name="connection.username">ServerGH</property>

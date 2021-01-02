@@ -22,9 +22,9 @@ public class Greenhouse1Application
 	public static void main(String[] args) 
 	{
 	    Properties systemProps = System.getProperties();
-	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\mysql-cert\\keystore"); 
+	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\keystores\\keystore"); 
 	    System.setProperty("javax.net.ssl.keyStorePassword","password");
-	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\mysql-cert\\truststore"); 
+	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\keystores\\truststore"); 
 	    System.setProperty("javax.net.ssl.trustStorePassword","password");
 	    System.setProperties(systemProps);
 		

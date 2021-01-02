@@ -16,6 +16,7 @@ services:
     image: jboss/keycloak:11.0.3
     volumes:
       - ./imports:/opt/jboss/keycloak/imports
+      - ./certs:/etc/x509/https
     command:
       - "-b 0.0.0.0"
       - "-Dkeycloak.profile.feature.scripts=enabled"
@@ -28,14 +29,18 @@ services:
       DB_DATABASE: keycloak
       DB_USER: keycloak
       DB_PASSWORD: password
+      KEYCLOAK_HTTP_PORT: 8080
+      KEYCLOAK_HTTPS_PORT: 8443
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
       # JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled"
     ports:
-      - 8080:8080
+      #- 8080:8080
+      - 8443:8443
     expose:
-      - 8080
+      #- 8080
+      - 8443
     depends_on:
       - postgres
 
