@@ -1,6 +1,7 @@
 package com.tdd.greenhouse;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.w3c.dom.Document;
@@ -19,6 +20,10 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
+		
+		String password = JOptionPane.showInputDialog(null,"Inserisci password per avviare il software!", "Boot unlock");
+		
+		
 	    Properties systemProps = System.getProperties();
 	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\mysql-cert\\keystore"); 
 	    System.setProperty("javax.net.ssl.keyStorePassword","password");

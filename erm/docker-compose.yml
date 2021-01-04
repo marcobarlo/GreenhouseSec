@@ -3,11 +3,14 @@ version: '3'
 services:
   postgres:
     image: postgres
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./certs3:/var/lib/postgresql
+      - ./conf/pg_hba.conf:/etc/pg_hba.conf
     environment:
       POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
+      POSTGRES_USER: localhost
       POSTGRES_PASSWORD: password
     ports:
       - 5432:5432
@@ -17,6 +20,8 @@ services:
     volumes:
       - ./imports:/opt/jboss/keycloak/imports
       - ./certs:/etc/x509/https
+      - ./certs2:/var/run/secrets/kubernetes.io/serviceaccount
+      - ./root:/opt/jboss/.postgresql
     command:
       - "-b 0.0.0.0"
       - "-Dkeycloak.profile.feature.scripts=enabled"
@@ -27,13 +32,15 @@ services:
       DB_ADDR: postgres
       DB_PORT: 5432
       DB_DATABASE: keycloak
-      DB_USER: keycloak
+      DB_USER: localhost
       DB_PASSWORD: password
       KEYCLOAK_HTTP_PORT: 8080
       KEYCLOAK_HTTPS_PORT: 8443
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
+      JDBC_PARAMS: sslmode=verify-ca&sslcert=/etc/x509/https/tls.crt&sslkey=/etc/x509/https/tls.pk8 #&sslcert=/var/run/secrets/kubernetes.io/serviceaccount/server.crt sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory
+      X509_CA_BUNDLE: /var/run/secrets/kubernetes.io/serviceaccount/server.crt
       # JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled"
     ports:
       #- 8080:8080

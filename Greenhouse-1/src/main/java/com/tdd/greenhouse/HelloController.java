@@ -1,6 +1,8 @@
 package com.tdd.greenhouse;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -85,9 +87,13 @@ public class HelloController {
     }
 
     
-    @GetMapping(value = "/coltivazioni", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String coltivaziget() {
-        return "Mele e lamponi list";
+    @GetMapping(value = "sezione/{idsez}/coltivazioni", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ColtivazioneBusiness> coltivaziget(@PathVariable("idsez") long idsez, Model model) {
+    	configCommonAttributes(model);
+        int ids = (int) idsez;
+    	List<ColtivazioneBusiness> retval = new ArrayList<ColtivazioneBusiness>();
+    	retval = ControllerFacade.ricercaColtivazione(null,ids,-1,-1);
+        return retval;
     }
     
     

@@ -1,8 +1,17 @@
 package com.tdd.greenhouse;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -20,8 +29,34 @@ public class Greenhouse1Application
 {
 
 	public static void main(String[] args) 
-	{
-	    Properties systemProps = System.getProperties();
+	{	
+		JPasswordField pf = new JPasswordField();
+		int okCxl = JOptionPane.showConfirmDialog(null, pf, "Inserisci password per avviare il software!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		String password=null;
+		if (okCxl == JOptionPane.OK_OPTION) 
+		  password = new String(pf.getPassword());
+		else
+	    	System.exit(1);
+		
+		CipherInputStream cis = null;
+		//decritto il file di configurazione
+		try
+		{
+			PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
+			SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndTripleDES");
+			SecretKey secretKey = secretKeyFactory.generateSecret(pbeKeySpec);
+				//leggo il sale
+			FileInputStream fis = new FileInputStream("configEnc.xml");
+			byte[] salt = new byte[8];
+			fis.read(salt);
+				//inizializzo il cifrario col sale e 100 iteraz
+			PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 100);
+			Cipher cipher = Cipher.getInstance("PBEWithMD5AndTripleDES");
+			cipher.init(Cipher.DECRYPT_MODE, secretKey, pbeParameterSpec);
+			cis = new CipherInputStream(fis,cipher);
+		}catch (Exception e) {e.printStackTrace(); System.out.println("Impossibile aprire il file di configurazione!");System.exit(1);}
+		
+		Properties systemProps = System.getProperties();
 	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\keystores\\keystore"); 
 	    System.setProperty("javax.net.ssl.keyStorePassword","password");
 	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\keystores\\truststore"); 
@@ -33,7 +68,8 @@ public class Greenhouse1Application
 		NodeList nList = null;
 		String host=null;
 		String clientID=null;
-		Document doc=readConfig();
+		Document doc=readConfig(cis);
+		try {cis.close();} catch (IOException e) {e.printStackTrace();}
 		host =doc.getElementsByTagName("brokerHost").item(0).getTextContent();
 		nList = doc.getElementsByTagName("device");	
 		clientID = doc.getElementsByTagName("clientID").item(0).getTextContent();
@@ -48,13 +84,14 @@ public class Greenhouse1Application
 		System.out.println("...startup finished!");
 	}
 	
-	private static Document readConfig()
+	private static Document readConfig(CipherInputStream fis)
 	{
 		try {
-			File fXmlFile = new File("config.xml");
+			//File fXmlFile = new File("config.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(fXmlFile);
+			Document doc = dBuilder.parse(fis);
+			//Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
 			return doc;
 	    	} 
@@ -80,7 +117,7 @@ public class Greenhouse1Application
 				String mac =eElement.getElementsByTagName("mac").item(0).getTextContent();
 				mac=mac.replaceAll(":", "").replaceAll("-", "");
 				
-				//System.out.println("Main : ID : " + id + "- mac :"+ mac);
+				System.out.println("Sending : ID : " + id + "- mac :"+ mac);
 				Configurazione c = new Configurazione(id, mac, sez);
 				conn.sendSetUp(c);
 			}

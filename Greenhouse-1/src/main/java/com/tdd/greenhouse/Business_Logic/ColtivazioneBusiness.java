@@ -14,7 +14,6 @@ public class ColtivazioneBusiness implements Comparator<ColtivazioneBusiness> {
 	
 	public ColtivazioneBusiness() 
 	{
-		
 	}
 	
 	public int compare(ColtivazioneBusiness a, ColtivazioneBusiness b)

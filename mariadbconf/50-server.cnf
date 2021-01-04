@@ -11,3 +11,18 @@ ssl-key=/etc/mysql/ssl/server-key.pem
 tls_version = TLSv1.2,TLSv1.3
 bind-address = *  
 require_secure_transport =  1
+
+# File Key Management
+plugin_load_add = file_key_management
+file_key_management_filename = /etc/mysql/encryption/keyfile.enc
+file_key_management_filekey = FILE:/etc/mysql/encryption/keyfile.key
+file_key_management_encryption_algorithm = aes_cbc
+encrypt_binlog = 1
+
+# InnoDB/XtraDB Encryption
+innodb_encrypt_tables = ON
+innodb_encrypt_temporary_tables = ON
+innodb_encrypt_log = ON
+innodb_encryption_threads = 4
+innodb_encryption_rotate_key_age = 1
+innodb_tablespaces_encryption
