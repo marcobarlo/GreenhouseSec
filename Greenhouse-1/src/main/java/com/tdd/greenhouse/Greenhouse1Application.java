@@ -56,20 +56,19 @@ public class Greenhouse1Application
 			cis = new CipherInputStream(fis,cipher);
 		}catch (Exception e) {e.printStackTrace(); System.out.println("Impossibile aprire il file di configurazione!");System.exit(1);}
 		
+		NodeList nList = null;
+		String host=null;
+		String clientID=null;
+		Document doc=readConfig(cis);
+		try {cis.close();} catch (IOException e) {e.printStackTrace();}
+		
 		Properties systemProps = System.getProperties();
 	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\keystores\\keystore"); 
 	    System.setProperty("javax.net.ssl.keyStorePassword","password");
 	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\keystores\\truststore"); 
 	    System.setProperty("javax.net.ssl.trustStorePassword","password");
 	    System.setProperties(systemProps);
-		
-		
-		SpringApplication.run(Greenhouse1Application.class, args);
-		NodeList nList = null;
-		String host=null;
-		String clientID=null;
-		Document doc=readConfig(cis);
-		try {cis.close();} catch (IOException e) {e.printStackTrace();}
+
 		host =doc.getElementsByTagName("brokerHost").item(0).getTextContent();
 		nList = doc.getElementsByTagName("device");	
 		clientID = doc.getElementsByTagName("clientID").item(0).getTextContent();
@@ -80,6 +79,7 @@ public class Greenhouse1Application
 		//send config packets
 		sendConfig(nList, conn);
 		
+		SpringApplication.run(Greenhouse1Application.class, args);
 		//checkpoint
 		System.out.println("...startup finished!");
 	}
@@ -98,6 +98,7 @@ public class Greenhouse1Application
 		catch (Exception e) 
 	    {e.printStackTrace();
 	    System.out.println("Errore nella lettura del file di configurazione!");
+	    System.exit(1);
 	    return null;}
 	}
 	

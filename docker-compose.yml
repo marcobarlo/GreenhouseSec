@@ -4,13 +4,14 @@ services:
 
   db:
     image: mariadb:10.5-focal
-    #dockerfile:./Dockerfile
+    #dockerfile: ./Dockerfile
     restart: always
     command: mysqld --user=root
     volumes:
       - ./mysql-dump:/docker-entrypoint-initdb.d
       - ./mysql-cert:/etc/mysql/ssl
       - ./mariadbconf:/etc/mysql/conf.d
+      - ./mariaencr:/etc/mysql/encryption/
     environment:
       MYSQL_DATABASE: greenhouse
       MYSQL_ROOT_PASSWORD: password
@@ -21,12 +22,72 @@ services:
     image: eclipse-mosquitto
     hostname: mosquitto
     container_name: mosquitto
+    volumes:
+      - ./mosquitto-cert:/mosquitto/certs
     expose:
       - "1883"
       - "9001"
+      - "8883"
     ports:
+      - "8883:8883"
       - "1883:1883"
       - "9001:9001"
   #  volumes:
   #    - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  
+  # postgres:
+    # image: postgres
+    # command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
+    # container_name: erm_postgres_1
+    # volumes:
+      # - postgres_data:/var/lib/postgresql/data
+      # - ./certs3:/var/lib/postgresql
+      # - ./conf/pg_hba.conf:/etc/pg_hba.conf
+    # environment:
+      # POSTGRES_DB: keycloak
+      # POSTGRES_USER: localhost
+      # POSTGRES_PASSWORD: password
+    # ports:
+      # - 5432:5432
+
+  # keycloak:
+    # image: jboss/keycloak:11.0.3
+    # container_name: erm_keycloak_1
+    # volumes:
+     # - ./imports:/opt/jboss/keycloak/imports
+     # - ./certs:/etc/x509/https
+     # - ./certs2:/var/run/secrets/kubernetes.io/serviceaccount
+     # - ./certs2:/opt/jboss/.postgresql
+    # command:
+     # - "-b 0.0.0.0"
+     # - "-Dkeycloak.profile.feature.scripts=enabled"
+     # - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+     # - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+    # environment:
+     # DB_VENDOR: POSTGRES
+     # DB_ADDR: postgres
+     # DB_PORT: 5432
+     # DB_DATABASE: keycloak
+     # DB_USER: localhost
+     # DB_PASSWORD: password
+     # KEYCLOAK_HTTP_PORT: 8080
+     # KEYCLOAK_HTTPS_PORT: 8443
+     # KEYCLOAK_USER: admin
+     # KEYCLOAK_PASSWORD: admin
+     # KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
+     # JDBC_PARAMS: sslmode=verify-ca&sslcert=/etc/x509/https/tls.crt&sslkey=/etc/x509/https/tls.pk8 #&sslcert=/var/run/secrets/kubernetes.io/serviceaccount/server.crt sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory
+     # X509_CA_BUNDLE: /var/run/secrets/kubernetes.io/serviceaccount/server.crt
+     #JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled"
+    # ports:
+     #- 8080:8080
+     # - 8443:8443
+    # expose:
+     #- 8080
+      # - 8443
+    # depends_on:
+      # - postgres
+
+# volumes:
+    # postgres_data:
+      # driver: local
   

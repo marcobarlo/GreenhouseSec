@@ -34,9 +34,18 @@ public class HelloController {
     //@Autowired
     //private ControllerFacade facade;
 	
-    @GetMapping(value = "/public", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/public", produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
-        return "Greetings from Spring Boot!";
+        return "<HTML><head>Benvenuto sulla pagina di greenhouse!</head><body>\r\n" + 
+        		"<div id=\"finestra\" align=\"center\">\r\n" + 
+        		"&nbsp;\r\n" + 
+        		"<h2>HOME PAGE</h2>\r\n" + 
+        		"Questa è una prova per la pagina di home.\r\n" + 
+        		"</br>Puoi entrare come agronomo o contadino!\r\n" + 
+        		"</br>Solo gli agronomi posso modificare le coltivazioni\r\n" + 
+        		"<h3><a href=\"https://localhost:8081/1/coltivazione/1\">entra</a></h3>\r\n" + 
+        		"</div>\r\n" + 
+        		"</body></html>";
     }
 
     @GetMapping(value = "/denied", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -51,6 +60,9 @@ public class HelloController {
         configCommonAttributes(model);
         int idi = (int) id;
         int ids = (int) idsez;
+        if(idi<1||ids<1)
+        	throw new BadReq();
+        
         ColtivazioneBusiness colt = ControllerFacade.getColtivazioneByID(idi,ids);
         if(colt!=null)
         {
@@ -63,9 +75,20 @@ public class HelloController {
 
     @PutMapping(value = "sezione/{idsez}/coltivazione/{id}")
     public ResponseEntity<Boolean> putColtivazione(@PathVariable("id") long id,@PathVariable("idsez") long idsez, @RequestBody ParamsPut parametri/*, @RequestBody float umidita,  @RequestBody float irradianza*/,Model model) throws JsonProcessingException
-    {
+    {	
+    	Float temperatura = parametri.getTemperatura();
+    	Float umidita = parametri.getUmidita();
+    	Float irradianza = parametri.getIrradianza();
+		if(temperatura!=null && (temperatura < -10 || temperatura >60))
+			throw new BadReq();
+		if(umidita!=null && (umidita < 0 || umidita >100))
+			throw new BadReq();
+		if(irradianza!=null && (irradianza<0 || irradianza>10000))
+			throw new BadReq();
         int idi = (int) id;
         int ids = (int) idsez;
+        if(idi<1||ids<1)
+        	throw new BadReq();
         //ColtivazioneBusiness colt = ControllerFacade.getColtivazioneByID(idi);
         boolean risposta = ControllerFacade.modificaAmbiente(idi, ids, parametri.getTemperatura(), parametri.getUmidita(), parametri.getIrradianza());
         return ResponseEntity.ok(risposta);
@@ -91,27 +114,30 @@ public class HelloController {
     public List<ColtivazioneBusiness> coltivaziget(@PathVariable("idsez") long idsez, Model model) {
     	configCommonAttributes(model);
         int ids = (int) idsez;
+        if(ids<1)
+        	throw new BadReq();
     	List<ColtivazioneBusiness> retval = new ArrayList<ColtivazioneBusiness>();
     	retval = ControllerFacade.ricercaColtivazione(null,ids,-1,-1);
         return retval;
     }
     
     
-	  @DeleteMapping("/coltivazione/{id}")
+	/*  @DeleteMapping("sezione/{idsez}/coltivazione/{id}")
 	  public ResponseEntity<Boolean> deleteDocument(@PathVariable long id) {
 	      System.out.println("calling delete operation");
 	      //boolean deleted = documentRepository.deleteById(id);
 	      boolean deleted = true;
 	      return ResponseEntity.ok(deleted);
-	  }
+	  }*/
 
 
 	@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Coltivazione not found")
 	public class NotFoundException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+	}
 	
-		/**
-		 * 
-		 */
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST,reason = "ID non validi")
+	public class BadReq extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 	}
 }

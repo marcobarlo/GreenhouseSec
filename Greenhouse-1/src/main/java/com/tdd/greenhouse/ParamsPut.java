@@ -1,16 +1,20 @@
 package com.tdd.greenhouse;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 public class ParamsPut {
-	private float temperatura;
-	private float umidita;
-	private float irradianza;
+	private Float temperatura;
+	private Float umidita;
+	private Float irradianza;
 	public ParamsPut() {};
-	public ParamsPut(float t, float u, float i)
+	public ParamsPut(Float t, Float u, Float i)
 	{
 		temperatura = t;
 		umidita = u;
 		irradianza = i;
 	}
+	
 	public float getTemperatura() {
 		return temperatura;
 	}
