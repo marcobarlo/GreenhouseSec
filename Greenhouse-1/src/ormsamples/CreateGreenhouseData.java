@@ -4,10 +4,14 @@
  */
 package ormsamples;
 
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.orm.*;
 
@@ -112,6 +116,7 @@ public class CreateGreenhouseData {
 			//sez1.aree.add(a1);
 			//sez1.aree.add(a2);
 			
+			
 			if(i<5)
 				sez1.save();
 
@@ -131,8 +136,8 @@ public class CreateGreenhouseData {
 			amb1.save();
 			amb2.save();
 
-			//t.commit();
-			t.rollback();
+			t.commit();
+			//t.rollback();
 			PersistentTransaction t1 = com.tdd.greenhouse.model.GreenhousePersistentManager.instance().getSession().beginTransaction();
 			try {
 
@@ -150,17 +155,18 @@ public class CreateGreenhouseData {
 				c1.setAmbiente(amb1);
 				c2.setAmbiente(amb2);
 				
-				//c1.save();
-				//c2.save();
+				c1.save();
+				c2.save();
 
-
-				//t1.commit();
 				
-				t1.rollback();
+				t1.commit();
+				prova.creaColt(c1.getSezione(), c1.getID(), c1.getID());
+				prova.creaColt(c2.getSezione(), c2.getID(), c2.getID());
+				//t1.rollback();
 
 			}
 			catch (Exception e) {
-				t1.rollback();
+				//t1.rollback();
 			}
 
 		}

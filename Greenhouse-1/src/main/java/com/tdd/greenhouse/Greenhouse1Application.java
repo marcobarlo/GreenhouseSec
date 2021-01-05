@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -78,11 +79,27 @@ public class Greenhouse1Application
 		Document doc=readConfig(cis);
 		try {cis.close();} catch (IOException e) {e.printStackTrace();}
 		
+		JPasswordField pf2 = new JPasswordField();
+		okCxl = JOptionPane.showConfirmDialog(null, pf2, "Inserisci password per il keystore!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		password=null;
+		if (okCxl == JOptionPane.OK_OPTION) 
+		  password = new String(pf2.getPassword());
+		else
+	    	System.exit(1);
+		
+		JPasswordField pf3 = new JPasswordField();
+		okCxl = JOptionPane.showConfirmDialog(null, pf3, "Inserisci password per il truststore!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		String passwordTrust=null;
+		if (okCxl == JOptionPane.OK_OPTION) 
+			passwordTrust = new String(pf3.getPassword());
+		else
+	    	System.exit(1);
+		
 		Properties systemProps = System.getProperties();
 	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\keystores\\keystore"); 
-	    System.setProperty("javax.net.ssl.keyStorePassword","password");
+	    System.setProperty("javax.net.ssl.keyStorePassword",password);
 	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\keystores\\truststore"); 
-	    System.setProperty("javax.net.ssl.trustStorePassword","password");
+	    System.setProperty("javax.net.ssl.trustStorePassword",passwordTrust);
 	    System.setProperties(systemProps);
 	    
 	    host =doc.getElementsByTagName("brokerHost").item(0).getTextContent();
