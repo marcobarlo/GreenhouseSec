@@ -1,5 +1,7 @@
 package com.tdd.greenhouse;
 
+import org.hibernate.cfg.Configuration;
+
 import com.tdd.greenhouse.Business_Logic.ControllerFacade;
 import com.tdd.greenhouse.Business_Logic.DettagliBusiness;
 

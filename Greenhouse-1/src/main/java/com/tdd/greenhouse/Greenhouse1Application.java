@@ -3,6 +3,8 @@ package com.tdd.greenhouse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Scanner;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.SecretKey;
@@ -15,14 +17,28 @@ import javax.swing.JPasswordField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.cfg.Configuration;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.hibernate4.encryptor.HibernatePBEEncryptorRegistry;
+import org.orm.PersistentException;
+import org.orm.PersistentSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.tdd.greenhouse.Connection.Connection;
+import com.tdd.greenhouse.model.Coltivazione;
 
 @SpringBootApplication
 public class Greenhouse1Application 
@@ -68,14 +84,13 @@ public class Greenhouse1Application
 	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\keystores\\truststore"); 
 	    System.setProperty("javax.net.ssl.trustStorePassword","password");
 	    System.setProperties(systemProps);
-
-		host =doc.getElementsByTagName("brokerHost").item(0).getTextContent();
+	    
+	    host =doc.getElementsByTagName("brokerHost").item(0).getTextContent();
 		nList = doc.getElementsByTagName("device");	
 		clientID = doc.getElementsByTagName("clientID").item(0).getTextContent();
 		//startup the connection with broker
 		Connection conn = Connection.getInstance();
 		conn.startup(host, clientID);
-		
 		//send config packets
 		sendConfig(nList, conn);
 		
@@ -136,5 +151,15 @@ public class Greenhouse1Application
 	{
 		Connection.getInstance().shutdown();
 	}
+	
+    
+ /*   @Autowired private ApplicationContext applicationContext;
+
+    public void setPassword(String myDynamicallyCalculatedPassword){
+
+      BasicDataSource dataSourceShrms = applicationContext.getBean("dataSourceShrms");
+      dataSourceShrms.setPassword(myDynamicallyCalculatedPassword);
+
+    }*/
 
 }

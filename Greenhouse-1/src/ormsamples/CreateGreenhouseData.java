@@ -131,8 +131,8 @@ public class CreateGreenhouseData {
 			amb1.save();
 			amb2.save();
 
-			t.commit();
-			
+			//t.commit();
+			t.rollback();
 			PersistentTransaction t1 = com.tdd.greenhouse.model.GreenhousePersistentManager.instance().getSession().beginTransaction();
 			try {
 
@@ -150,12 +150,13 @@ public class CreateGreenhouseData {
 				c1.setAmbiente(amb1);
 				c2.setAmbiente(amb2);
 				
-				c1.save();
-				c2.save();
+				//c1.save();
+				//c2.save();
 
 
-				t1.commit();
+				//t1.commit();
 				
+				t1.rollback();
 
 			}
 			catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.tdd.greenhouse.Business_Logic;
 
 import org.greenrobot.eventbus.EventBus;
+import org.hibernate.cfg.Configuration;
 import org.orm.PersistentException;
 
 import com.tdd.greenhouse.Connection.*;

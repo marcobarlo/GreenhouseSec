@@ -16,6 +16,11 @@ package com.tdd.greenhouse.model;
 import org.orm.*;
 import org.orm.cfg.JDBCConnectionSetting;
 import org.hibernate.*;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.cfg.Configuration;
+
 import java.util.Properties;
 
 public class GreenhousePersistentManager extends PersistentManager {
@@ -30,6 +35,13 @@ public class GreenhousePersistentManager extends PersistentManager {
 	private GreenhousePersistentManager() throws PersistentException {
 		super(_connectionSetting, _sessionType, _timeToAlive, new String[] {}, _extraProperties, _configurationFile);
 		setFlushMode(FlushMode.AUTO);
+		/*Configuration cfg = new Configuration().configure("ormmapping/Greenhouse.cfg.xml");
+	    cfg.setProperty("hibernate.connection.password", "password");
+	    StandardServiceRegistry standardRegistry = cfg.getStandardServiceRegistryBuilder().build();
+	    MetadataSources metaData = new MetadataSources(standardRegistry);
+	    super.configureMetadataSources(metaData);
+	    JDBCConnectionSetting jdbc = new JDBCConnectionSetting(super.);
+	    super.saveJDBCConnectionSetting(PROJECT_NAME, new );*/
 	}
 	
 	public String getProjectName() {
@@ -38,7 +50,16 @@ public class GreenhousePersistentManager extends PersistentManager {
 	
 	public static synchronized final PersistentManager instance() throws PersistentException {
 		if (_instance == null) {
-			_instance = new GreenhousePersistentManager();
+			_connectionSetting = new JDBCConnectionSetting();
+			_connectionSetting.setConnectionURL("jdbc:mariadb://localhost/greenhouse?autoReconnect=true&amp;useUniCode=true&amp;characterEncoding=UTF-8&amp;useSSL=true&amp;verifyServerCertificate=true&amp;requireSSL=true");
+			_connectionSetting.setDatabaseName("greemhouse");
+			_connectionSetting.setDialect("org.hibernate.dialect.MySQL5Dialect");
+			_connectionSetting.setUserName("ServerGH");
+			_connectionSetting.setDriverClass("org.mariadb.jdbc.Driver");
+			//System.out.println(_connectionSetting.getPassword());
+			_connectionSetting.setPassword("password");
+			//System.out.println(_connectionSetting.getPassword());
+			_instance = new GreenhousePersistentManager();	
 		}
 		
 		return _instance;
@@ -75,6 +96,15 @@ public class GreenhousePersistentManager extends PersistentManager {
 		}
 		else {
 			_connectionSetting = aConnectionSetting;
+			_connectionSetting = new JDBCConnectionSetting();
+			_connectionSetting.setConnectionURL("jdbc:mariadb://localhost/greenhouse?autoReconnect=true&amp;useUniCode=true&amp;characterEncoding=UTF-8&amp;useSSL=true&amp;verifyServerCertificate=true&amp;requireSSL=true");
+			_connectionSetting.setDatabaseName("greemhouse");
+			_connectionSetting.setDialect("org.hibernate.dialect.MySQL5Dialect");
+			_connectionSetting.setUserName("ServerGH");
+			_connectionSetting.setDriverClass("org.mariadb.jdbc.Driver");
+			System.out.println(_connectionSetting.getPassword());
+			_connectionSetting.setPassword("password");
+			System.out.println(_connectionSetting.getPassword());
 		}
 		
 	}
