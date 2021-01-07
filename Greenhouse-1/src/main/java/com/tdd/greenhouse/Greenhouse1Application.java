@@ -3,7 +3,7 @@ package com.tdd.greenhouse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.Scanner;
+
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -17,21 +17,12 @@ import javax.swing.JPasswordField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.cfg.Configuration;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.hibernate4.encryptor.HibernatePBEEncryptorRegistry;
-import org.orm.PersistentException;
-import org.orm.PersistentSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,12 +30,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.tdd.greenhouse.Connection.Connection;
-import com.tdd.greenhouse.model.Coltivazione;
+
 
 @SpringBootApplication
 public class Greenhouse1Application 
 {
-
 	public static void main(String[] args) 
 	{	
 		JPasswordField pf = new JPasswordField();
@@ -98,16 +88,25 @@ public class Greenhouse1Application
 		Properties systemProps = System.getProperties();
 	    System.setProperty("javax.net.ssl.keyStore","D:\\greenhouseSSD\\keystores\\keystore"); 
 	    System.setProperty("javax.net.ssl.keyStorePassword",password);
+        System.setProperty("server.ssl.key-store-password", password);
 	    System.setProperty("javax.net.ssl.trustStore","D:\\greenhouseSSD\\keystores\\truststore"); 
 	    System.setProperty("javax.net.ssl.trustStorePassword",passwordTrust);
+	    StandardPBEStringEncryptor shsec = new StandardPBEStringEncryptor();
+	    shsec.setPassword(password);
+	    String encryptedMessage = "imwRCNH5cJVtiYtKyTSFJ/D13DEAUuvLSdAhBIJ51Swi8csnm6f1JnItZHd0WGij";
+	    System.setProperty("keycloak.credentials.secret", shsec.decrypt(encryptedMessage));
 	    System.setProperties(systemProps);
 	    
+	    String mosquittopass = "Sidu1ENOEZv2ASbxXlWEYNmeh1tVpJEa";
+	    shsec = new StandardPBEStringEncryptor();
+	    shsec.setPassword(passwordTrust);
+	    mosquittopass = shsec.decrypt(mosquittopass);
 	    host =doc.getElementsByTagName("brokerHost").item(0).getTextContent();
 		nList = doc.getElementsByTagName("device");	
 		clientID = doc.getElementsByTagName("clientID").item(0).getTextContent();
 		//startup the connection with broker
 		Connection conn = Connection.getInstance();
-		conn.startup(host, clientID);
+		conn.startup(host, clientID, mosquittopass);
 		//send config packets
 		sendConfig(nList, conn);
 		

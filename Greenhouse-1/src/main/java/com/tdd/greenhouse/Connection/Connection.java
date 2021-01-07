@@ -18,7 +18,7 @@ public class Connection{
 	private Semaphore sem;
 	private int idToAck;
 	private Connection(){}
-	public void startup(String broker, String clientId)
+	public void startup(String broker, String clientId, String password)
 	{
 		sem= new Semaphore(0);
 		//setup mqtt client
@@ -28,6 +28,8 @@ public class Connection{
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setAutomaticReconnect(true);
             connOpts.setCleanSession(true);
+            connOpts.setPassword(password.toCharArray());
+            connOpts.setUserName("Mainframe");
             System.out.println("Connecting to broker: "+broker + " ...");
             client.connect(connOpts);
             System.out.println("Connected!");
