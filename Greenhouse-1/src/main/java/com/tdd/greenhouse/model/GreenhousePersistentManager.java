@@ -23,6 +23,9 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.Properties;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+
 public class GreenhousePersistentManager extends PersistentManager {
 	private static final String PROJECT_NAME = "Greenhouse";
 	private static PersistentManager _instance = null;
@@ -35,13 +38,6 @@ public class GreenhousePersistentManager extends PersistentManager {
 	private GreenhousePersistentManager() throws PersistentException {
 		super(_connectionSetting, _sessionType, _timeToAlive, new String[] {}, _extraProperties, _configurationFile);
 		setFlushMode(FlushMode.AUTO);
-		/*Configuration cfg = new Configuration().configure("ormmapping/Greenhouse.cfg.xml");
-	    cfg.setProperty("hibernate.connection.password", "password");
-	    StandardServiceRegistry standardRegistry = cfg.getStandardServiceRegistryBuilder().build();
-	    MetadataSources metaData = new MetadataSources(standardRegistry);
-	    super.configureMetadataSources(metaData);
-	    JDBCConnectionSetting jdbc = new JDBCConnectionSetting(super.);
-	    super.saveJDBCConnectionSetting(PROJECT_NAME, new );*/
 	}
 	
 	public String getProjectName() {
@@ -56,9 +52,15 @@ public class GreenhousePersistentManager extends PersistentManager {
 			_connectionSetting.setDialect("org.hibernate.dialect.MySQL5Dialect");
 			_connectionSetting.setUserName("ServerGH");
 			_connectionSetting.setDriverClass("org.mariadb.jdbc.Driver");
-			//System.out.println(_connectionSetting.getPassword());
-			_connectionSetting.setPassword("password");
-			//System.out.println(_connectionSetting.getPassword());
+			JPasswordField pf3 = new JPasswordField(24);
+			int okCxl = JOptionPane.showConfirmDialog(null, pf3, "Inserisci password per il database!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			String passwordDB=null;
+			if (okCxl == JOptionPane.OK_OPTION) 
+				passwordDB = new String(pf3.getPassword());
+			else
+		    	System.exit(1);
+			
+			_connectionSetting.setPassword(passwordDB);
 			_instance = new GreenhousePersistentManager();	
 		}
 		
