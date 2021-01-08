@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.SecretKey;
@@ -18,12 +17,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,7 +32,7 @@ public class Greenhouse1Application
 {
 	public static void main(String[] args) 
 	{	
-		JPasswordField pf = new JPasswordField();
+		JPasswordField pf = new JPasswordField(24);
 		int okCxl = JOptionPane.showConfirmDialog(null, pf, "Inserisci password per avviare il software!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 		String password=null;
 		if (okCxl == JOptionPane.OK_OPTION) 
@@ -69,7 +64,7 @@ public class Greenhouse1Application
 		Document doc=readConfig(cis);
 		try {cis.close();} catch (IOException e) {e.printStackTrace();}
 		
-		JPasswordField pf2 = new JPasswordField();
+		JPasswordField pf2 = new JPasswordField(24);
 		okCxl = JOptionPane.showConfirmDialog(null, pf2, "Inserisci password per il keystore!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 		password=null;
 		if (okCxl == JOptionPane.OK_OPTION) 
@@ -77,7 +72,7 @@ public class Greenhouse1Application
 		else
 	    	System.exit(1);
 		
-		JPasswordField pf3 = new JPasswordField();
+		JPasswordField pf3 = new JPasswordField(24);
 		okCxl = JOptionPane.showConfirmDialog(null, pf3, "Inserisci password per il truststore!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 		String passwordTrust=null;
 		if (okCxl == JOptionPane.OK_OPTION) 

@@ -2,7 +2,8 @@ version: '3'
 
 services:
   postgres:
-    image: postgres
+    #image: postgres
+    build: .
     command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
     volumes:
       - postgres_data:/var/lib/postgresql/data

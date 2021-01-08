@@ -47,7 +47,7 @@ public class Main {
 		clientID = doc.getElementsByTagName("clientID").item(0).getTextContent();
 		//startup the connection with broker
 		Connection conn = Connection.getInstance();
-		conn.startup(host, clientID);
+		conn.startup(host, clientID, "password");
 		
 		//send config packets
 		sendConfig(nList, conn);

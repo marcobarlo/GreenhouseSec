@@ -147,6 +147,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+	                <archive>
+	                    <manifest>
+	                        <addClasspath>true</addClasspath>
+	                        <mainClass>main.Greenhouse1Application</mainClass>
+	                    </manifest>
+	                </archive>
+	                <skipTests>true</skipTests>
+            	</configuration>
 			</plugin>
 		</plugins>
 	</build>

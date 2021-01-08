@@ -1,8 +1,9 @@
 version: '3.1'
+
 services:
 
   db:
-    image: mariadb:10.5-focal
+    build: ./dockerfilemaria
     restart: always
     command: mysqld #--user=root
     volumes:
@@ -18,18 +19,19 @@ services:
       
   mosquitto:
     image: eclipse-mosquitto
+    #build: ./dockerfilemosquitto
     hostname: mosquitto
     container_name: mosquitto
     volumes:
       - ./mosquitto-cert:/mosquitto/certs
     expose:
-      - "1883"
-      - "9001"
+      #- "1883"
+      #- "9001"
       - "8883"
     ports:
       - "8883:8883"
-      - "1883:1883"
-      - "9001:9001"
+      #- "1883:1883"
+      #- "9001:9001"
   #  volumes:
   #    - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
   

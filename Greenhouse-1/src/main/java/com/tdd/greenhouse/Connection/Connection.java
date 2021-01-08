@@ -17,7 +17,7 @@ public class Connection{
 	private MqttClient client;
 	private Semaphore sem;
 	private int idToAck;
-	private Connection(){}
+	private Connection(){}		//prova
 	public void startup(String broker, String clientId, String password)
 	{
 		sem= new Semaphore(0);

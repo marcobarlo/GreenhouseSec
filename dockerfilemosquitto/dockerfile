@@ -1,0 +1,3 @@
+FROM eclipse-mosquitto
+
+USER root
