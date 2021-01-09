@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<brokerConfig>
-`		<brokerHost>tcp://localhost:1883</brokerHost>
+`		<brokerHost>ssl://localhost:8883</brokerHost>
 		<clientID>Mainframe</clientID>
 	</brokerConfig>
 	<devices>

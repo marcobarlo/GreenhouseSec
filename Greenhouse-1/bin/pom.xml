@@ -115,6 +115,31 @@
 	        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
 	        <version>1.2.0</version>
     	</dependency>
+    	
+    	<dependency>
+		    <groupId>org.greenrobot</groupId>
+		    <artifactId>eventbus</artifactId>
+		    <version>3.0.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt</artifactId>
+		    <version>1.9.2</version>
+		</dependency> 
+		
+		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt-hibernate4</artifactId>
+		    <version>1.9.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.github.ulisesbocchio</groupId>
+		    <artifactId>jasypt-spring-boot-starter</artifactId>
+		    <version>3.0.2</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -122,8 +147,18 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+	                <archive>
+	                    <manifest>
+	                        <addClasspath>true</addClasspath>
+	                        <mainClass>main.Greenhouse1Application</mainClass>
+	                    </manifest>
+	                </archive>
+	                <skipTests>true</skipTests>
+            	</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
+	
+	<packaging>jar</packaging>
 </project>

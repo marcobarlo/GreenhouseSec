@@ -46,9 +46,10 @@ public class GreenhousePersistentManager extends PersistentManager {
 	
 	public static synchronized final PersistentManager instance() throws PersistentException {
 		if (_instance == null) {
+			Configuration cfg = new Configuration().configure("ormmapping/Greenhouse.cfg.xml");
 			_connectionSetting = new JDBCConnectionSetting();
-			_connectionSetting.setConnectionURL("jdbc:mariadb://localhost/greenhouse?autoReconnect=true&amp;useUniCode=true&amp;characterEncoding=UTF-8&amp;useSSL=true&amp;verifyServerCertificate=true&amp;requireSSL=true");
-			_connectionSetting.setDatabaseName("greemhouse");
+			_connectionSetting.setConnectionURL(cfg.getProperty("hibernate.connection.url"));
+			_connectionSetting.setDatabaseName("greehouse");
 			_connectionSetting.setDialect("org.hibernate.dialect.MySQL5Dialect");
 			_connectionSetting.setUserName("ServerGH");
 			_connectionSetting.setDriverClass("org.mariadb.jdbc.Driver");
