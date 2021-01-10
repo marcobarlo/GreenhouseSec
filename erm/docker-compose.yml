@@ -4,22 +4,18 @@ services:
   postgres:
     #image: postgres
     build: .
-    #network_mode: host
     command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./certs3:/var/lib/postgresql
       - ./conf/pg_hba.conf:/etc/pg_hba.conf
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: localhost
-      POSTGRES_PASSWORD: password
-    ports:
-      - 5432:5432
+    env_file:
+        - postgres.env
+    #ports:
+    #  - 5432:5432
 
   keycloak:
     image: jboss/keycloak:11.0.3
-    #network_mode: host
     volumes:
       - ./imports:/opt/jboss/keycloak/imports
       - ./certs:/etc/x509/https
@@ -30,26 +26,13 @@ services:
       - "-Dkeycloak.profile.feature.scripts=enabled"
       - "-Dkeycloak.profile.feature.upload_scripts=enabled"
       - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_PORT: 5432
-      DB_DATABASE: keycloak
-      DB_USER: localhost
-      DB_PASSWORD: password
-      #KEYCLOAK_HTTP_PORT: 8080
-      KEYCLOAK_HTTPS_PORT: 8443
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
-      JDBC_PARAMS: sslmode=verify-ca&sslcert=/etc/x509/https/tls.crt&sslkey=/etc/x509/https/tls.pk8 #&sslcert=/var/run/secrets/kubernetes.io/serviceaccount/server.crt sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory
-      X509_CA_BUNDLE: /var/run/secrets/kubernetes.io/serviceaccount/server.crt
-      # JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled"
+    env_file:
+    - keycloak.env
     ports:
-      #- 8080:8080
+    #  - 8080:8080
       - 8443:8443
-    #expose:
-      #- 8080
+    expose:
+    #  - 8080
       - 8443
     depends_on:
       - postgres
@@ -57,53 +40,44 @@ services:
   db:
     build: ./dockerfilemaria
     restart: always
-    command: mysqld #--user=root
+    command: mysqld
     volumes:
       - ./mysql-dump:/docker-entrypoint-initdb.d
       - ./mysql-cert:/etc/mysql/ssl
       - ./mariadbconf:/etc/mysql/conf.d
       - ./mariaencr:/etc/mysql/encryption/
-    environment:
-      MYSQL_DATABASE: greenhouse
-      MYSQL_ROOT_PASSWORD: password
-    ports:
-      - 3306:3306
+    env_file:
+    - maria.env
+    #ports:
+    #  - 3306:3306
          
   mosquitto:
-    image: eclipse-mosquitto
+    build: ./dockerfilemosquitto
     hostname: mosquitto
     volumes:
       - ./mosquitto-cert:/mosquitto/certs
-    expose:
-      - "8883"
-    ports:
-      - 8883:8883
+      - ./mosquitto-config:/mosquitto/config
+    #expose:
+    #  - "8883"
+    #ports:
+    #  - 8883:8883
 
-  # web:
-    # image: openjdk:13
-    # command: java -jar /user/local/application/target.jar
-    # volumes:
-      # - ./spring:/user/local/application
-      # - ./spring/keystores:/keystores
-      # - ./spring/configEnc.xml:/configEnc.xml
-    # environment:
-      # XMLPASS: password
-      # KEYPASS: password
-      # TRUSTPASS: password
-      # DBPASS: password
-      # KEYCLOAKSECRET: 72d4cbe7-f6da-4746-929e-f835b76b5aab
-      # MOSQUITTOPASS: password
-      # mqttbroker: mosquitto
-      # MARIADB: db
-      # KEYCLOAKADDR: keycloak
-    # expose:
-      # - "8081"
-    # ports:
-      # - 8081:8081
-    # depends_on:
-      # - db
-      # - mosquitto
-      # - keycloak
+  web:
+    build: ./spring
+    command: java -jar /user/local/application/target.jar
+    volumes:
+      - ./spring/keystores:/keystores
+      - ./spring/configEnc.xml:/configEnc.xml
+    env_file:
+    - spring.env
+    expose:
+      - "8081"
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+      - mosquitto
+      - keycloak
       
 volumes:
     postgres_data:
