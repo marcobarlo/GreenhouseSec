@@ -28,3 +28,5 @@ innodb_encryption_rotate_key_age = 1
 innodb_tablespaces_encryption
 
 server_audit_logging=ON
+
+plugin_load_add = server_audit
