@@ -1,93 +1,84 @@
-version: '3.1'
+version: '3'
 
 services:
+  postgres:
+    #image: postgres
+    build: ./dockerfilepostgres
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./certs3:/var/lib/postgresql
+      - ./conf/pg_hba.conf:/etc/pg_hba.conf
+    env_file:
+        - postgres.env
+    #ports:
+    #  - 5432:5432
 
+  keycloak:
+    image: jboss/keycloak
+    volumes:
+      - ./imports:/opt/jboss/keycloak/imports
+      - ./certs:/etc/x509/https
+      - ./certs2:/var/run/secrets/kubernetes.io/serviceaccount
+      - ./root:/opt/jboss/.postgresql
+    command:
+      - "-b 0.0.0.0"
+      - "-Dkeycloak.profile.feature.scripts=enabled"
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+    env_file:
+    - keycloak.env
+    ports:
+    #  - 8080:8080
+      - 8443:8443
+    expose:
+    #  - 8080
+      - 8443
+    depends_on:
+      - postgres
+      
   db:
     build: ./dockerfilemaria
     restart: always
-    command: mysqld #--user=root
+    command: mysqld
     volumes:
       - ./mysql-dump:/docker-entrypoint-initdb.d
       - ./mysql-cert:/etc/mysql/ssl
       - ./mariadbconf:/etc/mysql/conf.d
       - ./mariaencr:/etc/mysql/encryption/
-    environment:
-      MYSQL_DATABASE: greenhouse
-      MYSQL_ROOT_PASSWORD: password
+    env_file:
+    - maria.env
     ports:
       - 3306:3306
-      
+         
   mosquitto:
-    image: eclipse-mosquitto
-    #build: ./dockerfilemosquitto
+    build: ./dockerfilemosquitto
     hostname: mosquitto
-    container_name: mosquitto
     volumes:
       - ./mosquitto-cert:/mosquitto/certs
+      - ./mosquitto-config:/mosquitto/config
+    #expose:
+    #  - "8883"
+    #ports:
+    #  - 192.168.43.6:8883:8883
+
+  web:
+    build: ./spring
+    command: java -jar /user/local/application/target.jar
+    volumes:
+      - ./spring/keystores:/keystores
+      - ./spring/configEnc.xml:/configEnc.xml
+    env_file:
+    - spring.env
     expose:
-      #- "1883"
-      #- "9001"
-      - "8883"
+      - "8081"
     ports:
-      - "8883:8883"
-      #- "1883:1883"
-      #- "9001:9001"
-  #  volumes:
-  #    - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-  
-  # postgres:
-    # image: postgres
-    # command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
-    # container_name: erm_postgres_1
-    # volumes:
-      # - postgres_data:/var/lib/postgresql/data
-      # - ./certs3:/var/lib/postgresql
-      # - ./conf/pg_hba.conf:/etc/pg_hba.conf
-    # environment:
-      # POSTGRES_DB: keycloak
-      # POSTGRES_USER: localhost
-      # POSTGRES_PASSWORD: password
-    # ports:
-      # - 5432:5432
-
-  # keycloak:
-    # image: jboss/keycloak:11.0.3
-    # container_name: erm_keycloak_1
-    # volumes:
-     # - ./imports:/opt/jboss/keycloak/imports
-     # - ./certs:/etc/x509/https
-     # - ./certs2:/var/run/secrets/kubernetes.io/serviceaccount
-     # - ./certs2:/opt/jboss/.postgresql
-    # command:
-     # - "-b 0.0.0.0"
-     # - "-Dkeycloak.profile.feature.scripts=enabled"
-     # - "-Dkeycloak.profile.feature.upload_scripts=enabled"
-     # - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
-    # environment:
-     # DB_VENDOR: POSTGRES
-     # DB_ADDR: postgres
-     # DB_PORT: 5432
-     # DB_DATABASE: keycloak
-     # DB_USER: localhost
-     # DB_PASSWORD: password
-     # KEYCLOAK_HTTP_PORT: 8080
-     # KEYCLOAK_HTTPS_PORT: 8443
-     # KEYCLOAK_USER: admin
-     # KEYCLOAK_PASSWORD: admin
-     # KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
-     # JDBC_PARAMS: sslmode=verify-ca&sslcert=/etc/x509/https/tls.crt&sslkey=/etc/x509/https/tls.pk8 #&sslcert=/var/run/secrets/kubernetes.io/serviceaccount/server.crt sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory
-     # X509_CA_BUNDLE: /var/run/secrets/kubernetes.io/serviceaccount/server.crt
-     #JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled"
-    # ports:
-     #- 8080:8080
-     # - 8443:8443
-    # expose:
-     #- 8080
-      # - 8443
-    # depends_on:
-      # - postgres
-
-# volumes:
-    # postgres_data:
-      # driver: local
-  
+      - 8081:8081
+    depends_on:
+      - db
+      - mosquitto
+      - keycloak
+      
+volumes:
+    postgres_data:
+      driver: local
