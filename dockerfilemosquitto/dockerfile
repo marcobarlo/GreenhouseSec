@@ -1,3 +1,2 @@
 FROM eclipse-mosquitto
-
-USER root
+RUN mosquitto_passwd -c -b /mosquitto/passfile Mainframe password
