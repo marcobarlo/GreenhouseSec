@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.tdd.greenhouse.model.DescrizioneColtivazione" table="DescrizioneColtivazione" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="tipo" column="Tipo" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="descrizione" column="Descrizione" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="ORM_Coltivazioni" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="DescrizioneColtivazioneID" not-null="true"/>
+			<one-to-many class="com.tdd.greenhouse.model.Coltivazione"/>
+		</set>
+	</class>
+</hibernate-mapping>

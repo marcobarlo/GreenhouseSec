@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+ "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+   	<!-- properties -->
+   	
+   		<!-- <property name="connection.clientCertificateKeyStoreUrl">D:\greenhouseSSD\keystores\keystore</property>
+		<property name="connection.clientCertificateKeyStoreType">jks</property>
+		<property name="connection.clientCertificateKeyStorePassword">password</property>
+		<property name="connection.trustCertificateKeyStoreUrl">D:\greenhouseSSD\keystores\truststore</property>
+		<property name="connection.trustCertificateKeyStoreType">jks</property>
+		<property name="connection.trustCertificateKeyStorePassword">password</property> -->
+   	
+		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+		<property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mariadb://localhost/greenhouse?autoReconnect=true&amp;useUniCode=true&amp;characterEncoding=UTF-8&amp;useSSL=true&amp;verifyServerCertificate=true&amp;requireSSL=true</property>
+		<property name="connection.username">ServerGH</property>
+		<!-- <property name="connection.password">password</property> HAAHAHAHAHAH NON SERVE AHAHAHAHAAHAHAHAHAHAHAHAHH-->
+		<property name="show_sql">false</property>
+		<property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
+		<property name="connection.verifyServerCertificate">true</property> 
+		<property name="connection.useSSL">true</property>
+		<!-- <property name="connectionProperties">
+	            oracle.net.ssl_cipher_suites: (ssl_rsa_export_with_rc4_40_md5, ssl_rsa_export_with_des40_cbc_sha)
+	            oracle.net.ssl_client_authentication: false
+	            oracle.net.ssl_version: 3.0
+	            oracle.net.encryption_client: REJECTED 
+	            oracle.net.crypto_checksum_client: REJECTED
+        </property> -->
+       <!-- <typedef name="encrypted" class="org.jasypt.hibernate4.type.EncryptedStringType">
+	      <param name="encryptorRegisteredName">strongHibernateStringEncryptor</param>
+	    </typedef>-->
+
+		<!-- mapping files -->
+		<mapping resource="ormmapping/greenhouse/model/Ambiente.hbm.xml" />
+		<mapping resource="ormmapping/greenhouse/model/AreaColtivata.hbm.xml" />
+		<mapping resource="ormmapping/greenhouse/model/Coltivazione.hbm.xml" />
+		<mapping resource="ormmapping/greenhouse/model/DescrizioneColtivazione.hbm.xml" />
+		<mapping resource="ormmapping/greenhouse/model/Impiegato.hbm.xml" />
+		<mapping resource="ormmapping/greenhouse/model/Sezione.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>
