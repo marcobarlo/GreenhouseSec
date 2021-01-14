@@ -152,23 +152,23 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
+				"key": "redirect_uri",
+				"value": "https://192.168.1.8:8081",
+				"type": "string"
+			},
+			{
 				"key": "accessTokenUrl",
-				"value": "https://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
+				"value": "http://keycloak:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
 				"type": "string"
 			},
 			{
 				"key": "authUrl",
-				"value": "https://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/auth",
+				"value": "http://keycloak:8080/auth/realms/Greenhouse/protocol/openid-connect/auth",
 				"type": "string"
 			},
 			{
 				"key": "tokenName",
 				"value": "GHToken",
-				"type": "string"
-			},
-			{
-				"key": "redirect_uri",
-				"value": "http://localhost:8081",
 				"type": "string"
 			},
 			{

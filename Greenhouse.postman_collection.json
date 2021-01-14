@@ -14,8 +14,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/public",
-					"protocol": "http",
+					"raw": "https://localhost:8081/public",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -55,13 +55,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/coltivazioni",
-					"protocol": "http",
+					"raw": "https://localhost:8081/sezione/1/coltivazioni",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
+						"sezione",
+						"1",
 						"coltivazioni"
 					]
 				}
@@ -75,7 +77,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"temperatura\": 15,\r\n    \"umidita\": 96,\r\n    \"irradianza\": 1200\r\n}",
+					"raw": "{\r\n    \"temperatura\": 15,\r\n    \"umidita\": null,\r\n    \"irradianza\": null\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -83,8 +85,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/sezione/1/coltivazione/1",
-					"protocol": "http",
+					"raw": "https://localhost:8081/sezione/1/coltivazione/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -114,13 +116,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/coltivazioni",
-					"protocol": "http",
+					"raw": "https://localhost:8443/sezione/2/coltivazioni",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8443",
 					"path": [
+						"sezione",
+						"2",
 						"coltivazioni"
 					]
 				}
@@ -133,14 +137,16 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/coltivazioni/2",
-					"protocol": "http",
+					"raw": "https://localhost:8443/sezione/1/coltivazione/2",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8443",
 					"path": [
-						"coltivazioni",
+						"sezione",
+						"1",
+						"coltivazione",
 						"2"
 					]
 				}
@@ -152,13 +158,13 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
-				"key": "accessTokenUrl",
-				"value": "https://localhost:8443/auth/realms/Greenhouse/protocol/openid-connect/token",
+				"key": "authUrl",
+				"value": "https://keycloak:8443/auth/realms/Greenhouse/protocol/openid-connect/auth",
 				"type": "string"
 			},
 			{
-				"key": "authUrl",
-				"value": "https://localhost:8443/auth/realms/Greenhouse/protocol/openid-connect/auth",
+				"key": "accessTokenUrl",
+				"value": "https://keycloak:8443/auth/realms/Greenhouse/protocol/openid-connect/token",
 				"type": "string"
 			},
 			{

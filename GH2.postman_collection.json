@@ -18,20 +18,20 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"departmentId\": 1,\n    \"name\": \"document Name here\"\n}",
+					"raw": "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket\nticket=${permission_ticket}",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
-					"protocol": "http",
+					"raw": "https://localhost:443/auth/realms/Greenhouse/protocol/openid-connect/token",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "443",
 					"path": [
 						"auth",
 						"realms",
@@ -50,14 +50,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/coltivazioni",
-					"protocol": "http",
+					"raw": "https://localhost:8443/realms/Greenhouse/clients",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8443",
 					"path": [
-						"coltivazioni"
+						"realms",
+						"Greenhouse",
+						"clients"
 					]
 				}
 			},
@@ -89,12 +91,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/auth/realms/Greenhouse/authz/protection/resource_set",
-					"protocol": "http",
+					"raw": "https://localhost:8443/auth/realms/Greenhouse/authz/protection/resource_set",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"auth",
 						"realms",
@@ -108,7 +110,7 @@
 			"response": []
 		},
 		{
-			"name": "Create resource Copy",
+			"name": "Get access token",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -119,8 +121,29 @@
 					}
 				],
 				"body": {
-					"mode": "raw",
-					"raw": "grant_type=client_credentials&client_id=adee35f9-7362-4b97-ba65-bff97576e443&client_secret=password",
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "GreenhousePublic",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "amarch",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "text"
@@ -128,12 +151,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/auth/realms/Greenhouse/protocol/openid-connect/token",
-					"protocol": "http",
+					"raw": "https://keycloak:8443/auth/realms/Greenhouse/protocol/openid-connect/token",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"keycloak"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"auth",
 						"realms",

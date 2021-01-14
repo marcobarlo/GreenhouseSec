@@ -1,4 +1,0 @@
-FROM openjdk:13-jdk
-COPY target.jar /user/local/application/target.jar
-RUN groupadd -r spring && useradd -r -g spring spring -s /bin/sh 
-USER spring

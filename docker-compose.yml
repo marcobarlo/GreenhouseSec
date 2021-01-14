@@ -39,6 +39,7 @@ services:
       
   db:
     build: ./dockerfilemaria
+    #image: mariadb:10.5-focal
     restart: always
     command: mysqld
     volumes:
@@ -48,8 +49,8 @@ services:
       - ./mariaencr:/etc/mysql/encryption/
     env_file:
     - maria.env
-    ports:
-      - 3306:3306
+    #ports:
+    #  - 3306:3306
          
   mosquitto:
     build: ./dockerfilemosquitto
