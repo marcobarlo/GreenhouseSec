@@ -1,0 +1,135 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/run/secrets/PostgresKey -c ssl_ca_file=/var/lib/postgresql/root.crt -c hba_file=/etc/pg_hba.conf
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./certs3:/var/lib/postgresql
+      - ./conf/pg_hba.conf:/etc/pg_hba.conf
+    env_file:
+        - postgres.env
+    secrets:
+     - source: PostgresKey
+       uid: '999'
+       gid: '999' 
+       mode: 0400
+     - source: password
+       uid: '999'
+       gid: '999'
+       mode: 0400
+    ports:
+      - 5432:5432
+
+  keycloak:
+    image: jboss/keycloak:11.0.3
+    volumes:
+      - ./imports:/opt/jboss/keycloak/imports
+      - ./certs:/etc/x509/https
+      - ./certs2:/var/run/secrets/kubernetes.io/serviceaccount
+      - ./root:/opt/jboss/.postgresql
+    secrets:
+     - source: password
+       mode: 0444
+     - source: Kadminpass
+       mode: 0444
+    command:
+      - "-b 0.0.0.0"
+      - "-Dkeycloak.profile.feature.scripts=enabled"
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+    env_file:
+    - keycloak.env
+    ports:
+    #  - 8080:8080
+      - 8443:8443
+    expose:
+    #  - 8080
+      - 8443
+    depends_on:
+      - postgres
+      
+  db:
+    #build: ./dockerfilemaria
+    #image: erm_db
+    image: mariadb:10.5-focal
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    command: mysqld
+    secrets:
+      - source: MariaDBKeyFile
+        mode: 0440
+        uid: '999'
+        gid: '999'
+      - source: MariaDBPrivKey
+        mode: 0440
+        uid: '999'
+        gid: '999'
+      - source: password
+        uid: '999'
+        gid: '999'
+        mode: 0440
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+      - ./mysql-cert:/etc/mysql/ssl
+      - ./mariadbconf:/etc/mysql/conf.d
+      - ./mariaencr:/etc/mysql/encryption/
+    env_file:
+    - maria.env
+    #ports:
+    #  - 3306:3306
+         
+  mosquitto:
+    #build: ./dockerfilemosquitto
+    image: erm_mosquitto
+    hostname: mosquitto
+    secrets:
+        - MosquittoPrivKey
+    volumes:
+      - ./mosquitto-cert:/mosquitto/certs
+      - ./mosquitto-config:/mosquitto/config
+    #expose:
+    #  - "8883"
+    #ports:
+    #  - 8883:8883
+
+  web:
+    #build: ./spring
+    image: erm_web
+    command: java -jar /user/local/application/target.jar
+    volumes:
+      - ./spring/keystores:/keystores
+      - ./spring/configEnc.xml:/configEnc.xml
+    env_file:
+    - spring.env
+    expose:
+      - "8081"
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+      - mosquitto
+      - keycloak
+      
+volumes:
+    postgres_data:
+      driver: local
+      
+secrets:
+    MariaDBKeyFile:
+        external: true
+    MariaDBPrivKey:
+        external: true
+    MosquittoPrivKey:
+        external: true
+    PostgresKey:
+        external: true
+    password:
+        external: true
+    Kadminpass:
+        external: true
